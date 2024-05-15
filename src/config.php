@@ -161,14 +161,14 @@ if (!defined('PURGELY_WEBHOOKS_URL_ENDPOINT')) {
  * Set the default webhooks username
  */
 if (!defined('PURGELY_WEBHOOKS_USERNAME')) {
-    define('PURGELY_WEBHOOKS_USERNAME', 'wordpress-bot');
+    define('PURGELY_WEBHOOKS_USERNAME', '');
 }
 
 /**
  * Set the default webhooks channel
  */
 if (!defined('PURGELY_WEBHOOKS_CHANNEL')) {
-    define('PURGELY_WEBHOOKS_CHANNEL', 'general');
+    define('PURGELY_WEBHOOKS_CHANNEL', '');
 }
 
 /**
