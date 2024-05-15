@@ -191,18 +191,30 @@ function send_web_hook($message)
     }
 
     $webhook_url = Purgely_Settings::get_setting('webhooks_url_endpoint');
+
+    if ( ! $message || ! $webhook_url ) {
+        return;
+    }
+
+    $data = array( 'text' => $message );
+
     $username = Purgely_Settings::get_setting('webhooks_username');
     $channel = Purgely_Settings::get_setting('webhooks_channel');
 
+    if ( $username ) {
+        $data['username'] = $username;
+    }
+
+    if ( $channel ) {
+        $data['channel'] = $channel;
+    }
+
+    if ( str_contains( $webhook_url, 'slack.com' ) ) {
+        $data['icon_emoji'] = ':airplane:';
+    }
+
     $headers = array('Content-type: application/json');
-    $data = wp_json_encode(
-        array(
-            'text' => $message,
-            'username' => $username,
-            'channel' => '#' . $channel,
-            'icon_emoji' => ':airplane:'
-        )
-    );
+    $data = wp_json_encode( $data );
 
     try {
         $response = Requests::request($webhook_url, $headers, $data, Requests::POST);
@@ -227,15 +239,16 @@ function test_web_hook()
     $username = Purgely_Settings::get_setting('webhooks_username');
     $channel = Purgely_Settings::get_setting('webhooks_channel');
 
+	$data = array( 'text' => 'Webhook connection from Fastly successful.' );
+
+	if ( str_contains( $webhook_url, 'slack.com' ) ) {
+        $data['username'] = $username;
+        $data['channel'] = $channel;
+        $data['icon_emoji'] = ':airplane:';
+    }
+
     $headers = array('Content-type: application/json');
-    $data = wp_json_encode(
-        array(
-            'text' => 'Webhook connection successful!',
-            'username' => $username,
-            'channel' => '#' . $channel,
-            'icon_emoji' => ':airplane:'
-        )
-    );
+    $data = array( wp_json_encode( $data ) );
 
     try {
         $response = Requests::request($webhook_url, $headers, $data, Requests::POST);
@@ -245,12 +258,12 @@ function test_web_hook()
             error_log('Webhooks - test connection: ' . $response->body);
         }
 
-        return array('status' => $response->success, 'message' => $message);
+        return array('status' => $response->success, 'message' => 'SUCCESSFUL: ' . $message . ' ' . print_r( $data, 1 ));
     } catch (Exception $e) {
         if (Purgely_Settings::get_setting('fastly_debug_mode')) {
             error_log('Webhooks - test connection: ' . $e->getMessage());
         }
-        return array('status' => false, 'message' => $e->getMessage());
+        return array('status' => false, 'message' => 'EXCEPTION: ' . $e->getMessage());
     }
 }
 
