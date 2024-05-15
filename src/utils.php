@@ -248,7 +248,7 @@ function test_web_hook()
     }
 
     $headers = array('Content-type: application/json');
-    $data = array( wp_json_encode( $data ) );
+    $data = wp_json_encode( $data );
 
     try {
         $response = Requests::request($webhook_url, $headers, $data, Requests::POST);
@@ -256,9 +256,10 @@ function test_web_hook()
 
         if (Purgely_Settings::get_setting('fastly_debug_mode')) {
             error_log('Webhooks - test connection: ' . $response->body);
+            error_log('Webhooks - sent: ' . print_r( $data, 1 ));
         }
 
-        return array('status' => $response->success, 'message' => 'SUCCESSFUL: ' . $message . ' ' . print_r( $data, 1 ));
+        return array('status' => $response->success, 'message' => 'SUCCESSFUL: ' . $message );
     } catch (Exception $e) {
         if (Purgely_Settings::get_setting('fastly_debug_mode')) {
             error_log('Webhooks - test connection: ' . $e->getMessage());
