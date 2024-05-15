@@ -821,6 +821,7 @@ class Purgely_Settings_Page
         <script type='text/javascript'>
             jQuery(document).ready(function ($) {
                 jQuery('#test-webhooks-connection-btn').click(function () {
+                    document.getElementById('test-connection-response').innerHTML = 'Waiting for response...';
                     $.ajax({
                         method: 'GET',
                         url: '<?php echo esc_url( admin_url('admin-ajax.php') ); ?>',
