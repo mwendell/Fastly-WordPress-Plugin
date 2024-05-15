@@ -1548,11 +1548,12 @@ class Purgely_Settings_Page
     public function webhooks_username_render()
     {
         $options = Purgely_Settings::get_settings();
+        $options_username = esc_attr($options['webhooks_username']) ?: '';
         ?>
         <input type='text' name='fastly-settings-webhooks[webhooks_username]'
-               value='<?php echo esc_attr($options['webhooks_username']); ?>' size="<?php echo esc_attr( self::INPUT_SIZE ) ?>">
+               value='<?php echo $options_username; ?>' size="<?php echo esc_attr( self::INPUT_SIZE ) ?>">
         <p class="description">
-            <?php esc_html_e('Slack username.', 'purgely'); ?>
+            <?php esc_html_e('Slack username, ie: "wordpress-bot"', 'purgely'); ?>
         </p>
         <?php
     }
@@ -1921,11 +1922,12 @@ class Purgely_Settings_Page
     public function webhooks_channel_render()
     {
         $options = Purgely_Settings::get_settings();
+        $options_channel = esc_attr($options['webhooks_channel']) ?: '';
         ?>
         #<input type='text' name='fastly-settings-webhooks[webhooks_channel]'
-                value='<?php echo esc_attr($options['webhooks_channel']); ?>' size="<?php echo esc_attr( self::INPUT_SIZE ) ?>">
+                value='<?php echo $options_channel; ?>' size="<?php echo esc_attr( self::INPUT_SIZE ) ?>">
         <p class="description">
-            <?php esc_html_e('Slack channel.', 'purgely'); ?>
+            <?php esc_html_e('Slack channel, ie: "general"', 'purgely'); ?>
         </p>
         <?php
     }
